@@ -21,6 +21,11 @@ class SomeDataServiceStubThreeInputs implements SomeDataService {
     public int[] retrieveAllData() {
         return new int[] {1,2,3};
     }
+
+    @Override
+    public boolean storeDataTotal(int sum) {
+        return true;
+    }
 }
 
 class SomeBusinessStubTest {

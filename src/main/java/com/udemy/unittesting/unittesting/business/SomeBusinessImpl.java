@@ -36,6 +36,10 @@ public class SomeBusinessImpl {
             sum += value;
         }
 
+        if(someDataService.storeDataTotal(sum) == false) {
+            sum = 0;
+            System.out.println("Unable to store data into backend");
+        }
         return sum;
     }
 }

@@ -12,8 +12,8 @@ import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.Mockito.*;
 
 /*
 The disadvantage of stubbing the interface method is that we can't generalize it gracefully;
@@ -47,6 +47,7 @@ class SomeBusinessMockTest {
     public void calculateSumUsingDataServiceBasic() {
         // Mocking/Stubbing the function (under test)
         when(someDataServiceMock.retrieveAllData()).thenReturn(new int[]{1, 2, 3});
+        when(someDataServiceMock.storeDataTotal(anyInt())).thenReturn(true);
         assertEquals(6, business.calculateSumUsingDataService());
     }
 
@@ -54,8 +55,8 @@ class SomeBusinessMockTest {
     public void calculateSumUsingDataServiceEmpty() {
         // Mocking/Stubbing the function (under test)
         when(someDataServiceMock.retrieveAllData()).thenReturn(new int[]{});
+        when(someDataServiceMock.storeDataTotal(anyInt())).thenReturn(true);
         business.setSomeDataService(someDataServiceMock);
-
         assertEquals(0, business.calculateSumUsingDataService());
     }
 
@@ -63,6 +64,19 @@ class SomeBusinessMockTest {
     public void calculateSumUsingDataServiceOne() {
         // Mocking/Stubbing the function (under test)
         when(someDataServiceMock.retrieveAllData()).thenReturn(new int[]{1});
+        when(someDataServiceMock.storeDataTotal(anyInt())).thenReturn(true);
         assertEquals(1, business.calculateSumUsingDataService());
+        verify(someDataServiceMock, times(1)).retrieveAllData();
+        verify(someDataServiceMock, times(1)).storeDataTotal(anyInt());
+    }
+
+    @Test
+    public void calculateSumUsingDataServiceOneStoreFailed() {
+        // Mocking/Stubbing the function (under test)
+        when(someDataServiceMock.retrieveAllData()).thenReturn(new int[]{1});
+        when(someDataServiceMock.storeDataTotal(anyInt())).thenReturn(false);
+        assertEquals(0, business.calculateSumUsingDataService());
+        verify(someDataServiceMock, times(1)).retrieveAllData();
+        verify(someDataServiceMock, times(1)).storeDataTotal(anyInt());
     }
 }
